@@ -1,4 +1,4 @@
-import Customer from '@/app/models/Customer';
+import Customer from "@/models/Customer";
 
 // GET customer by ID
 export async function GET(request, { params }) {
