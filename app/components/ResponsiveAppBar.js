@@ -104,7 +104,7 @@ export default function ResponsiveAppBar() {
               </MenuItem>
 
               {/* Add Customers MenuItem for Mobile */}
-              <MenuItem key={3} onClick={() => router.push('/customers')}>
+              <MenuItem key={3} onClick={() => router.push('/customer')}>
                 <Typography sx={{ textAlign: 'center' }}>Customers</Typography>
               </MenuItem>
 
@@ -150,7 +150,7 @@ export default function ResponsiveAppBar() {
             {/* Add Customers Button for Desktop */}
             <Button
               key={3}
-              onClick={() => router.push('/customers')}
+              onClick={() => router.push('/customer')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Customers
