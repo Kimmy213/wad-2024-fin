@@ -1,4 +1,4 @@
-'use client';  // Add this at the top
+'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -52,50 +52,69 @@ const CustomerPage = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1>Customer Management</h1>
 
       {/* List All Customers */}
       <h2>Customers List</h2>
-      <ul>
-        {customers.map((customer) => (
-          <li key={customer._id}>
-            {customer.name} ({customer.memberNumber}) - {customer.interests}
-            <button onClick={() => handleDeleteCustomer(customer._id)}>Delete</button>
-            <button onClick={() => handleUpdateCustomer({ ...customer, interests: 'updated interest' })}>
-              Update
-            </button>
-          </li>
-        ))}
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {customers.length > 0 ? (
+          customers.map((customer) => (
+            <li key={customer._id} style={{ padding: '10px', border: '1px solid #ccc', margin: '10px 0' }}>
+              <div>
+                <strong>Name:</strong> {customer.name} ({customer.memberNumber})
+              </div>
+              <div>
+                <strong>Interests:</strong> {customer.interests}
+              </div>
+              <button onClick={() => handleDeleteCustomer(customer._id)} style={{ marginRight: '10px' }}>
+                Delete
+              </button>
+              <button onClick={() => handleUpdateCustomer({ ...customer, interests: 'Updated Interest' })}>
+                Update
+              </button>
+            </li>
+          ))
+        ) : (
+          <li>No customers found</li>
+        )}
       </ul>
 
       {/* Add New Customer */}
       <h2>Add New Customer</h2>
-      <input
-        type="text"
-        placeholder="Name"
-        value={newCustomer.name}
-        onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
-      />
-      <input
-        type="date"
-        placeholder="Date of Birth"
-        value={newCustomer.dateOfBirth}
-        onChange={(e) => setNewCustomer({ ...newCustomer, dateOfBirth: e.target.value })}
-      />
-      <input
-        type="number"
-        placeholder="Member Number"
-        value={newCustomer.memberNumber}
-        onChange={(e) => setNewCustomer({ ...newCustomer, memberNumber: e.target.value })}
-      />
-      <input
-        type="text"
-        placeholder="Interests"
-        value={newCustomer.interests}
-        onChange={(e) => setNewCustomer({ ...newCustomer, interests: e.target.value })}
-      />
-      <button onClick={handleAddCustomer}>Add Customer</button>
+      <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={newCustomer.name}
+          onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+          style={{ marginBottom: '10px' }}
+        />
+        <input
+          type="date"
+          placeholder="Date of Birth"
+          value={newCustomer.dateOfBirth}
+          onChange={(e) => setNewCustomer({ ...newCustomer, dateOfBirth: e.target.value })}
+          style={{ marginBottom: '10px' }}
+        />
+        <input
+          type="number"
+          placeholder="Member Number"
+          value={newCustomer.memberNumber}
+          onChange={(e) => setNewCustomer({ ...newCustomer, memberNumber: e.target.value })}
+          style={{ marginBottom: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Interests"
+          value={newCustomer.interests}
+          onChange={(e) => setNewCustomer({ ...newCustomer, interests: e.target.value })}
+          style={{ marginBottom: '10px' }}
+        />
+        <button onClick={handleAddCustomer} style={{ width: '100px' }}>
+          Add Customer
+        </button>
+      </div>
     </div>
   );
 };
