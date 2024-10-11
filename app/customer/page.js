@@ -11,6 +11,8 @@ const CustomerPage = () => {
     memberNumber: '',
     interests: ''
   });
+  const [editMode, setEditMode] = useState(false);
+  const [currentCustomerId, setCurrentCustomerId] = useState(null);
 
   // Fetch all customers (GET)
   const fetchCustomers = async () => {
@@ -34,20 +36,24 @@ const CustomerPage = () => {
   // Add a new customer (POST)
   const handleAddCustomer = async () => {
     try {
-      const response = await fetch('/api/customer', {
-        method: 'POST',
+      const method = editMode ? 'PUT' : 'POST';
+      const endpoint = editMode ? `/api/customer/${currentCustomerId}` : '/api/customer';
+      const response = await fetch(endpoint, {
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCustomer),
       });
 
       if (!response.ok) {
-        throw new Error(`Error adding customer: ${response.statusText}`);
+        throw new Error(`Error ${editMode ? 'updating' : 'adding'} customer: ${response.statusText}`);
       }
 
       setNewCustomer({ name: '', dateOfBirth: '', memberNumber: '', interests: '' });
-      fetchCustomers(); // Refresh the list after adding
+      setEditMode(false);
+      setCurrentCustomerId(null);
+      fetchCustomers(); // Refresh the list after adding/updating
     } catch (error) {
-      console.error('Failed to add customer:', error);
+      console.error(`Failed to ${editMode ? 'update' : 'add'} customer:`, error);
     }
   };
 
@@ -68,30 +74,23 @@ const CustomerPage = () => {
     }
   };
 
-  // Update customer (PUT)
-  const handleUpdateCustomer = async (updatedCustomer) => {
-    try {
-      const response = await fetch(`/api/customer/${updatedCustomer._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedCustomer),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error updating customer: ${response.statusText}`);
-      }
-
-      fetchCustomers(); // Refresh the list after update
-    } catch (error) {
-      console.error('Failed to update customer:', error);
-    }
+  // Edit customer (populate the form with existing customer data)
+  const handleEditCustomer = (customer) => {
+    setNewCustomer({
+      name: customer.name,
+      dateOfBirth: customer.dateOfBirth,
+      memberNumber: customer.memberNumber,
+      interests: customer.interests,
+    });
+    setEditMode(true);
+    setCurrentCustomerId(customer._id); // Save the ID of the customer to update
   };
 
   return (
     <div style={{ display: 'flex', gap: '20px', padding: '20px' }}>
       {/* Form Section */}
       <div style={{ flex: '1', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-        <h2>Add New Customer</h2>
+        <h2>{editMode ? 'Update' : 'Add New'} Customer</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px' }}>
           <input
             type="text"
@@ -118,7 +117,7 @@ const CustomerPage = () => {
             onChange={(e) => setNewCustomer({ ...newCustomer, interests: e.target.value })}
           />
           <button onClick={handleAddCustomer} style={{ backgroundColor: 'green', color: 'white', padding: '10px' }}>
-            Add Customer
+            {editMode ? 'Update Customer' : 'Add Customer'}
           </button>
         </div>
       </div>
@@ -136,11 +135,12 @@ const CustomerPage = () => {
                 <div>
                   <strong>Interests:</strong> {customer.interests}
                 </div>
-                <button onClick={() => handleDeleteCustomer(customer._id)} style={{ marginRight: '10px' }}>
-                  Delete
+                <button onClick={() => handleEditCustomer(customer)} style={{ marginRight: '10px' }}>
+                  Edit
                 </button>
-                <button onClick={() => handleUpdateCustomer({ ...customer, interests: 'Updated Interest' })}>
-                  Update
+                    <button onClick={() => handleDeleteCustomer(customer._id)} 
+                    style={{color: 'red' }}>
+                  Delete
                 </button>
               </li>
             ))
