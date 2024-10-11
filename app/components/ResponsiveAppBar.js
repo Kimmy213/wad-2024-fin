@@ -14,15 +14,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from 'next/navigation';
 
 // const pages = ['Products', 'Categories']; // UNUSED
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function ResponsiveAppBar() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -67,7 +65,6 @@ export default function ResponsiveAppBar() {
                 textDecoration: 'none',
               }}
             >
-
               VMS
             </Typography>
           </Button>
@@ -99,12 +96,16 @@ export default function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-
               <MenuItem key={1} onClick={() => router.push('/product')}>
                 <Typography sx={{ textAlign: 'center' }}>Products</Typography>
               </MenuItem>
               <MenuItem key={2} onClick={() => router.push('/category')}>
                 <Typography sx={{ textAlign: 'center' }}>Categories</Typography>
+              </MenuItem>
+
+              {/* Add Customers MenuItem for Mobile */}
+              <MenuItem key={3} onClick={() => router.push('/customers')}>
+                <Typography sx={{ textAlign: 'center' }}>Customers</Typography>
               </MenuItem>
 
             </Menu>
@@ -128,6 +129,7 @@ export default function ResponsiveAppBar() {
           >
             LOGO
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
               key={1}
@@ -145,15 +147,15 @@ export default function ResponsiveAppBar() {
               Categories
             </Button>
 
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
+            {/* Add Customers Button for Desktop */}
+            <Button
+              key={3}
+              onClick={() => router.push('/customers')}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Customers
+            </Button>
+
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
